@@ -1,2 +1,5 @@
-# security-analytics-project
-Our holy data science project
+# Botnet
+
+_Authors_: Zezhou Wang, Zhengqing Ye, Liyun Li
+
+## Abstract 
