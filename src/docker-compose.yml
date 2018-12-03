@@ -11,13 +11,18 @@ services:
         ports:
             - 3306:3306
         healthcheck:
-            test: 'mysql -u <DB_USER_HERE> --password=<DB_PASSWORD_HERE> -e "show database"'
+            test: 'mysql -u root --password=<DB_ROOT_PASSWORD_HERE> -e "show database"'
             timeout: 12s
             retries: 10
     shodan_stream:
         container_name: shodan_stream
         build: ./shodan
+        environment:
+            - SHODAN_DIR=/shodan
         depends_on:
             - db
         links:
             - db
+        volumes:
+            - ./shodan/bot:$SHODAN_DIR
+        command: python $SHODAN_DIR/streamer.py

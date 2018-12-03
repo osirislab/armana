@@ -1,13 +1,9 @@
 from python:3-alpine
 maintainer Liyun Li <liyun@nyu.edu>
 
-env SHODAN_DIR /shodan
-
-run mkdir -p $SHODAN_DIR
+run mkdir -p /shodan
 
 copy ./r.txt /tmp
-copy ./streamer.py $SHODAN_DIR
 run pip install -r /tmp/r.txt
 
-workdir $SHODAN_DIR
-cmd python streamer.py
+workdir /shodan
