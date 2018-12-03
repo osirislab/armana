@@ -22,7 +22,7 @@ services:
         container_name: shodan_stream
         build: ./shodan
         depends_on:
-            - db
+            - shodan_db
         volumes:
             - ./shodan/bot:/shodan
         command: python /shodan/streamer.py
