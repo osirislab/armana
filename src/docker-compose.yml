@@ -14,15 +14,17 @@ services:
             test: 'mysql -u root --password=<DB_ROOT_PASSWORD_HERE> -e "show database"'
             timeout: 12s
             retries: 10
+        networks:
+            shodan_gateway
     shodan_stream:
         container_name: shodan_stream
         build: ./shodan
-        environment:
-            - SHODAN_DIR=/shodan
         depends_on:
             - db
-        links:
-            - db
         volumes:
-            - ./shodan/bot:$SHODAN_DIR
-        command: python $SHODAN_DIR/streamer.py
+            - ./shodan/bot:/shodan
+        command: python /shodan/streamer.py
+        networks:
+            - shodan_gateway
+networks:
+    shodan_gateway: {}
