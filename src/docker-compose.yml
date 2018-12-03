@@ -19,7 +19,7 @@ services:
         networks:
             - shodan_gateway
     shodan_streamer:
-        container_name: shodan_stream
+        container_name: shodan_streamer
         build: ./shodan
         depends_on:
             - shodan_db
@@ -28,5 +28,6 @@ services:
         command: python /shodan/streamer.py
         networks:
             - shodan_gateway
+        tty: true
 networks:
     shodan_gateway: {}
