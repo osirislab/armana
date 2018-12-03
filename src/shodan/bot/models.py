@@ -10,8 +10,8 @@ class Stream(Base):
 
     id = Column(BigInteger, primary_key=True, autoincrement=True)
     product = Column(Text)
-    hash = Column(BigInteger, nullable=False)
-    ip = Column(BigInteger, nullable=False)
+    hash = Column(BigInteger)
+    ip = Column(BigInteger)
     org = Column(Text)
     data = Column(Text)
     port = Column(Integer)
@@ -55,9 +55,9 @@ class _Shodan(Base):
 
     # TODO: parse `options`
 
-    crawler = Column(Text, nullable=False)
-    module = Column(Text, nullable=False)
-    id = Column(Text, nullable=False)
+    crawler = Column(Text)
+    module = Column(Text)
+    id = Column(Text)
 
 
 class Option(Base):
