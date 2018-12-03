@@ -22,8 +22,8 @@ for record in bot.countries(['US']):
     ip_str = record.get('ip_str')
 
     s = Stream(
-        product, hash, ip, org, data, port, 
-        transport, isp, timestamp, ip_str
+        product=product, hash=hash, ip=ip, org=org, data=data, port=port, 
+        transport=transport, isp=isp, timestamp=timestamp, ip_str=ip_str
     )
 
     session.add(s)
@@ -32,7 +32,7 @@ for record in bot.countries(['US']):
     # location
     location = record.get('location')
     if type(location) is dict:
-        stream_id = id
+        stream_id = s.id
         longitude = location.get('longitude')
         latitude = location.get('latitude')
         country_code = location.get('country_code')
@@ -45,9 +45,10 @@ for record in bot.countries(['US']):
         dma_code = location.get('dma_code')
 
         l = Location(
-            stream_id, longitude, latitude, country_code,
-            country_code_3, country_name, city, postal_code,
-            region_code, area_code, dma_code
+            stream_id=stream_id, longitude=longitude, latitude=latitude,
+            country_code=country_code, country_code_3=country_code_3,
+            country_name=country_name, city=city, postal_code=postal_code,
+            region_code=region_code, area_code=area_code, dma_code=dma_code
         )
 
         session.add(l)
