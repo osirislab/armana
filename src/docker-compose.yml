@@ -15,8 +15,8 @@ services:
             timeout: 12s
             retries: 10
         networks:
-            shodan_gateway
-    shodan_stream:
+            - shodan_gateway
+    shodan_streamer:
         container_name: shodan_stream
         build: ./shodan
         depends_on:
