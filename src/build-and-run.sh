@@ -15,4 +15,4 @@ sed -i "s/<DB_USER_HERE>/$user/g" docker-compose.yml
 sed -i "s/<DB_PASSWORD_HERE>/$password/g" docker-compose.yml
 sed -i "s/<DB_ROOT_PASSWORD_HERE>/`./shodan/pwgen.sh`/g" docker-compose.yml
 
-docker-compose up --build shodan_streamer
+docker-compose up --build

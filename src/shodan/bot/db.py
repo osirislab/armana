@@ -30,7 +30,7 @@ print('Creating the engine.')
 engine = create_engine(link, echo=True, pool_recycle=600)
 
 print('Creating tables.')
-Base.metadata.create_table(engine) # Base is from models
+Base.metadata.create_all(engine) # Base is from models
 
 print('Creating a session.')
 Session = sessionmaker(bind=engine)
