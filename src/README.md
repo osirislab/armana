@@ -17,3 +17,9 @@ DB_HOST=localhost
 DB_NAME=relatednamepls
 DB_PORT=
 ```
+
+## Usage
+
+```
+./build-and-run.sh # only after you set up
+```
