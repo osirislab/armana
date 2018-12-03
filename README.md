@@ -1,5 +1,5 @@
 # Botnet
 
-_Authors_: Zezhou Wang, Zhengqing Ye, Liyun Li
+_Authors: Zezhou Wang, Zhengqing Ye, Liyun Li_
 
 ## Abstract 
