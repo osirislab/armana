@@ -1,0 +1,23 @@
+version: '3.6'
+services:
+    db:
+        container_name: shodan_db
+        image: mariadb
+        environment:
+            - MYSQL_DATABASE=<DB_NAME_HERE>
+            - MYSQL_USER=<DB_USER_HERE>
+            - MYSQL_PASSWORD=<DB_PASSWORD_HERE>
+            - MYSQL_ROOT_PASSWORD=<DB_ROOT_PASSWORD_HERE>
+        ports:
+            - 3306:3306
+        healthcheck:
+            test: 'mysql -u <DB_USER_HERE> --password=<DB_PASSWORD_HERE> -e "show database"'
+            timeout: 12s
+            retries: 10
+    shodan_stream:
+        container_name: shodan_stream
+        build: ./shodan
+        depends_on:
+            - db
+        links:
+            - db
