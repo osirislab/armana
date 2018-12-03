@@ -1,0 +1,29 @@
+Accessing https://stream.shodan.io/shodan/countries/US
+product GoAhead-Webs httpd
+hash -659784946
+tags ['self-signed']
+ip 646106507
+ssl {'dhparams': None, 'tlsext': [], 'versions': ['TLSv1', 'SSLv2', 'SSLv3', '-TLSv1.1', '-TLSv1.2', '-TLSv1.3'], 'acceptable_cas': [], 'cert': {'sig_alg': 'md5WithRSAEncryption', 'issued': '20060308220107Z', 'expires': '20060407220107Z', 'pubkey': {'bits': 512, 'type': 'rsa'}, 'version': 0, 'extensions': [], 'fingerprint': {'sha256': 'a03ab4cc538f370bdfa93ea01d63f2d745ca86cb08f99e93a93365e37cbedb63', 'sha1': '4660d27982d17a07388e59cdbd28f546c3f3feac'}, 'serial': 0, 'issuer': {'C': 'US', 'CN': 'AMI', 'L': 'Norcross', 'O': 'American Megatrends Inc.', 'ST': 'Georgia', 'emailAddress': 'support@ami.com', 'OU': 'Service Processors'}, 'expired': True, 'subject': {'C': 'US', 'CN': 'AMI', 'L': 'Norcross', 'O': 'American Megatrends Inc.', 'ST': 'Georgia', 'emailAddress': 'support@ami.com', 'OU': 'Service Processors'}}, 'cipher': {'version': 'TLSv1/SSLv3', 'bits': 256, 'name': 'AES256-SHA'}, 'chain': ['-----BEGIN CERTIFICATE-----\nMIICLDCCAdYCAQAwDQYJKoZIhvcNAQEEBQAwgaAxCzAJBgNVBAYTAlVTMRAwDgYD\nVQQIEwdHZW9yZ2lhMREwDwYDVQQHEwhOb3Jjcm9zczEhMB8GA1UEChMYQW1lcmlj\nYW4gTWVnYXRyZW5kcyBJbmMuMRswGQYDVQQLExJTZXJ2aWNlIFByb2Nlc3NvcnMx\nDDAKBgNVBAMTA0FNSTEeMBwGCSqGSIb3DQEJARYPc3VwcG9ydEBhbWkuY29tMB4X\nDTA2MDMwODIyMDEwN1oXDTA2MDQwNzIyMDEwN1owgaAxCzAJBgNVBAYTAlVTMRAw\nDgYDVQQIEwdHZW9yZ2lhMREwDwYDVQQHEwhOb3Jjcm9zczEhMB8GA1UEChMYQW1l\ncmljYW4gTWVnYXRyZW5kcyBJbmMuMRswGQYDVQQLExJTZXJ2aWNlIFByb2Nlc3Nv\ncnMxDDAKBgNVBAMTA0FNSTEeMBwGCSqGSIb3DQEJARYPc3VwcG9ydEBhbWkuY29t\nMFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBALOWPs653sarkCEl+p8ilYlTFpsbkjPM\nXBJXSW/ywspGpWRsA/4ZJ56mSZ3KoG2b8B3hTHa0x+OzsHMc4KjBAHUCAwEAATAN\nBgkqhkiG9w0BAQQFAANBAFtIie0zLCtmudKPZtjVBf/lHxRfvx9VK1AMAGEROcX9\nkCckKdN+wcdqIlkVy/Mq1Tqw2UA3fwry6uEneGjXMw4=\n-----END CERTIFICATE-----\n'], 'alpn': []}
+hostnames []
+org Cloud South
+data HTTP/1.0 200 OK
+Server: GoAhead-Webs
+Pragma: no-cache
+Cache-Control: no-cache,private
+Expires: 0
+Content-type: text/html
+Set-Cookie: test=1;path=/
+
+
+port 443
+transport tcp
+isp Cogent Communications
+http {'robots_hash': None, 'redirects': [{'host': '38.130.205.139', 'data': 'HTTP/1.0 302 Redirect\r\nServer: GoAhead-Webs\r\nDate: Fri Aug  9 07:44:46 2013\r\nPragma: no-cache\r\nCache-Control: no-cache\r\nContent-Type: text/html\r\nLocation: https://38.130.205.139/login.asp\r\n\r\n', 'location': '/'}], 'securitytxt': None, 'title': None, 'sitemap_hash': None, 'robots': None, 'favicon': None, 'host': '38.130.205.139', 'html': '<html>\r\n<head>\r\n<script type="text/javascript" src="/lib/xmit.js"></script>\r\n\r\n<script>\r\n\tfunction validate_prevlogin_resp()\r\n\t{\r\n\r\n\t\terrcod = WEBVAR_JSONVAR_WEB_SESSION_VALIDATE.HAPI_STATUS;\r\n\t\tif(errcod != 0)\r\n\t\t\twindow.location.href = "/page/login.html";\r\n\t\telse\r\n\t\t\twindow.location.href = "/index.html";\r\n\t}\r\n</script>\r\n\r\n\r\n<script language="javascript">\r\n\txmit.get({url:"/rpc/WEBSES/validate.asp",onrcv:validate_prevlogin_resp, status:\'\'});\r\n</script>\r\n\r\n\r\n</head>\r\n<body style=\'margin:0;padding:0\' bgcolor="#E0E0EB">\r\n</body>       \r\n</html>\r\n', 'location': '/login.asp', 'components': {'IIS\\;confidence:50': {'categories': []}, 'Microsoft ASP.NET': {'categories': ['Web Frameworks']}}, 'securitytxt_hash': None, 'server': 'GoAhead-Webs', 'sitemap': None, 'html_hash': -423974640}
+asn AS13886
+location {'country_code3': 'USA', 'city': None, 'region_code': None, 'postal_code': None, 'longitude': -97.822, 'country_code': 'US', 'latitude': 37.751000000000005, 'country_name': 'United States', 'area_code': None, 'dma_code': None}
+timestamp 2018-12-03T13:25:57.446574
+domains []
+ip_str 38.130.205.139
+os None
+_shodan {'crawler': '5faf2928ceb560cb4276cc1b4660b2d763cc6397', 'options': {}, 'module': 'https', 'id': 'b90cc736-b51b-4347-8ce2-b97087c2c854'}
+opts {'vulns': None, 'heartbleed': '2018/12/03 05:26:02 38.130.205.139:443 - SAFE\n'}

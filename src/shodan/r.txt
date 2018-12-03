@@ -1,3 +1,5 @@
 shodan
 python-dotenv
 mysql-connector
+sqlalchemy
+sqlalchemy_utils
