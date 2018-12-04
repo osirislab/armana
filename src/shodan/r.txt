@@ -1,5 +1,5 @@
 shodan
 python-dotenv
-mysql-connector
+psycopg2-binary
 sqlalchemy
 sqlalchemy_utils
