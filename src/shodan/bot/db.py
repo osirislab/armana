@@ -16,9 +16,9 @@ dbname = getenv('DB_NAME')
 dbport = getenv('DB_PORT')
 
 if not dbport:
-    dbport = 3306
+    dbport = 5432
 
-link = 'mysql+mysqlconnector://{dbuser}:{dbpass}@{dbhost}:{dbport}/{dbname}'.format(
+link = 'postgresql+psycopg2://{dbuser}:{dbpass}@{dbhost}:{dbport}/{dbname}'.format(
         dbuser=dbuser, dbpass=dbpass, dbhost=dbhost, dbname=dbname, dbport=dbport)
 
 print('Checking the database.')
