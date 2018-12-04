@@ -14,4 +14,7 @@ sed -i "s/<DB_NAME_HERE>/$name/g" docker-compose.yml
 sed -i "s/<DB_USER_HERE>/$user/g" docker-compose.yml
 sed -i "s/<DB_PASSWORD_HERE>/$password/g" docker-compose.yml
 
-docker-compose up --build
+
+docker-compose up --build -d shodan_db
+sleep 1
+docker-compose up --build -d shodan_streamer
