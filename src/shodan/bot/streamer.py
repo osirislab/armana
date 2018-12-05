@@ -2,11 +2,18 @@
 from models import Stream, Location
 from shodan import stream
 from db import Session
+from re import sub
+import logging
+
+
+logging.basicConfig(filename='shodan_streamer.log',level=logging.ERROR)
 
 bot = stream.Stream('qdH2Wz6Cpi14M2cVgnZ7AXOlf12FyCdT')
 
 session = Session()
 
+
+# TODO: handle exceptions better
 for record in bot.countries(['US']):
     # a stream metadata
     id = record.get('id')
@@ -27,7 +34,12 @@ for record in bot.countries(['US']):
     )
 
     session.add(s)
-    session.commit()
+
+    try:
+        session.commit()
+    except Exception as e:
+        logging.exception(e)
+        continue
 
     # location
     location = record.get('location')
@@ -52,4 +64,9 @@ for record in bot.countries(['US']):
         )
 
         session.add(l)
-        session.commit()
+
+        try:
+            session.commit()
+        except:
+            logging.exception(e)
+            continue
