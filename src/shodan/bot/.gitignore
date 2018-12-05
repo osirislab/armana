@@ -1,2 +1,3 @@
 .env
 __pycache__
+shodan_streamer.log

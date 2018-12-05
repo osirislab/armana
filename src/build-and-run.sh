@@ -17,4 +17,4 @@ sed -i "s/<DB_PASSWORD_HERE>/$password/g" docker-compose.yml
 
 docker-compose up --build -d shodan_db
 sleep 1
-docker-compose up --build shodan_streamer
+docker-compose up --build -d shodan_streamer
