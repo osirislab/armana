@@ -6,7 +6,8 @@ from re import sub
 import logging
 
 
-logging.basicConfig(filename='shodan_streamer.log',level=logging.ERROR)
+logging.basicConfig(filename='shodan_streamer.log', level=logging.ERROR)
+logging.getLogger('sqlalchemy').setLevel(logging.ERROR)
 
 bot = stream.Stream('qdH2Wz6Cpi14M2cVgnZ7AXOlf12FyCdT')
 
