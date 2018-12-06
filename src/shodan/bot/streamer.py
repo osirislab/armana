@@ -13,20 +13,23 @@ bot = stream.Stream('qdH2Wz6Cpi14M2cVgnZ7AXOlf12FyCdT')
 session = Session()
 
 
-# TODO: handle exceptions better
+def clean(s):
+    return s.replace('\0', '') if type(s) is str else s
+
+
 for record in bot.countries(['US']):
     # a stream metadata
-    id = record.get('id')
-    product = record.get('product')
-    hash = record.get('hash')
-    ip = record.get('ip')
-    org = record.get('org')
-    data = record.get('data')
-    port = record.get('port')
-    transport = record.get('transport')
-    isp = record.get('isp')
-    timestamp = record.get('timestamp')
-    ip_str = record.get('ip_str')
+    id = clean(record.get('id'))
+    product = clean(record.get('product'))
+    hash = clean(record.get('hash'))
+    ip = clean(record.get('ip'))
+    org = clean(record.get('org'))
+    data = clean(record.get('data'))
+    port = clean(record.get('port'))
+    transport = clean(record.get('transport'))
+    isp = clean(record.get('isp'))
+    timestamp = clean(record.get('timestamp'))
+    ip_str = clean(record.get('ip_str'))
 
     s = Stream(
         product=product, hash=hash, ip=ip, org=org, data=data, port=port, 
@@ -42,19 +45,19 @@ for record in bot.countries(['US']):
         continue
 
     # location
-    location = record.get('location')
+    location = clean(record.get('location'))
     if type(location) is dict:
         stream_id = s.id
-        longitude = location.get('longitude')
-        latitude = location.get('latitude')
-        country_code = location.get('country_code')
-        country_code_3 = location.get('country_code3')
-        country_name = location.get('country_name')
-        city = location.get('city')
-        postal_code = location.get('postal_code')
-        region_code = location.get('region_code')
-        area_code = location.get('area_code')
-        dma_code = location.get('dma_code')
+        longitude = clean(location.get('longitude'))
+        latitude = clean(location.get('latitude'))
+        country_code = clean(location.get('country_code'))
+        country_code_3 = clean(location.get('country_code3'))
+        country_name = clean(location.get('country_name'))
+        city = clean(location.get('city'))
+        postal_code = clean(location.get('postal_code'))
+        region_code = clean(location.get('region_code'))
+        area_code = clean(location.get('area_code'))
+        dma_code = clean(location.get('dma_code'))
 
         l = Location(
             stream_id=stream_id, longitude=longitude, latitude=latitude,
