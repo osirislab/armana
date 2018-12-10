@@ -5,17 +5,39 @@ import time
 import json
 import pycountry
 
-from app.models import Threat, Threat_Source_Stat, Threat_Destination_Stat
+from sqlalchemy_utils import database_exists, create_database
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy import create_engine
+from dotenv import load_dotenv
+from pathlib import Path
+from os import getenv
 
-class StatGen(threading.Thread):
-    ''' Probably doesn't need thread but implementing it anyway '''
-    def __init__(self, app, debug=False):
-        self.app = app
+from models import *
 
-    def run(self):
-        ''' Thread.start(), but can unthread if directly called '''
-        with self.app.app_context():
-            Threat.db.query.filter()
+load_dotenv(verbose=True, dotenv_path=Path('.')  / '.env')
+
+dbu = getenv('DB_USER')
+dbp = getenv('DB_PASS')
+dbh = getenv('DB_HOST')
+dbn = getenv('DB_NAME')
+
+
+link = 'postgresql+psycopg2://{u}:{p}@{h}/{n}'.format(u=dbu, p=dbp, h=dbh, n=dbn)
+
+
+print('Checking the database.')
+if not database_exists(link):
+    print('Creating the database.')
+    create_database(link)
+
+print('Creating the engine.')
+engine = create_engine(link, echo=True, pool_recycle=600)
+
+print('Creating tables.')
+Base.metadata.create_all(engine) # Base is from models
+
+print('Creating a session.')
+Session = sessionmaker(bind=engine)
 
 
 class SocketThread(threading.Thread):
@@ -36,7 +58,7 @@ class SocketThread(threading.Thread):
     dlat = 'destinationlatitude'
     unknown = 'UNKNOWN'
 
-    def __init__(self, app, debug=False):
+    def __init__(self, session, debug=False):
         '''Going to need that DB'''
         threading.Thread.__init__(self)
 
@@ -47,7 +69,7 @@ class SocketThread(threading.Thread):
             'Content-Type=application/json&X-atmo-protocol=true'
         )
 
-        self.app = app
+        self.session = session
         self.checked = False
         self.debug = debug
         self.ws = websocket.WebSocketApp(target_url, 
@@ -109,7 +131,7 @@ class SocketThread(threading.Thread):
         dcountry = pycountry.countries.get(alpha_2=dcountry).name
         
         with self.app.app_context():
-            self.app.db.session.add(
+            self.session.add(
                 Threat(
                     scity, scountry,
                     dcity, dcountry,
@@ -120,7 +142,7 @@ class SocketThread(threading.Thread):
                     attackname, attacktype
                 )
             )
-            self.app.db.session.commit()
+            self.session.commit()
 
         if self.debug:
             l = 32
