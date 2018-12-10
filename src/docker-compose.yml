@@ -30,5 +30,36 @@ services:
         tty: true
         stdin_open: true
 
+    checkpoint_db:
+        container_name: checkpoint_db
+        image: postgres:11-alpine
+        environment:
+            - POSTGRES_DB=<CHECKPOINT_BOT_DB_NAME_HERE>
+            - POSTGRES_USER=<CHECKPOINT_BOT_DB_USER_HERE>
+            - POSTGRES_PASSWORD=<CHECKPOINT_BOT_DB_PASSWORD_HERE>
+        healthcheck:
+            test: "pg_isready -U <CHECKPOINT_DB_USER_HERE>"
+            interval: 10s
+            timeout: 5s
+            retries: 5
+        volumes:
+            - ./db-data-checkpoint:/var/lib/postgresql/data
+        networks:
+            - checkpoint_gateway
+
+    checkpoint_bot:
+        container_name: checkpoint_bot
+        build: ./checkpoint-bot
+        depends_on:
+            - checkpoint_db
+        volumes:
+            - ./checkpoint-bot/app:/code
+        command: python /code/bot.py
+        networks:
+            - checkpoint_gateway
+        tty: true
+        stdin_open: true
+
 networks:
     shodan_gateway: {}
+    checkpoint_gateway: {}
