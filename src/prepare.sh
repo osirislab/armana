@@ -28,7 +28,3 @@ sed -i "s/<DB_PASSWORD_HERE>/$shodan_password/g" docker-compose.yml
 sed -i "s/<CHECKPOINT_DB_NAME_HERE>/$checkpoint_name/g" docker-compose.yml
 sed -i "s/<CHECKPOINT_DB_USER_HERE>/$checkpoint_user/g" docker-compose.yml
 sed -i "s/<CHECKPOINT_DB_PASSWORD_HERE>/$checkpoint_password/g" docker-compose.yml
-
-docker-compose up --build -d shodan_db checkpoint_db
-sleep 1
-docker-compose up --build -d shodan_streamer checkpoint_bot
