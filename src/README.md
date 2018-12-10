@@ -21,5 +21,7 @@ DB_PORT=
 ## Usage
 
 ```
-./build-and-run.sh # only after you set up
+./prepare.sh # only after you set up
 ```
+
+Then `docker-compose` whichever container you want
