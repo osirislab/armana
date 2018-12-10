@@ -1,8 +1,7 @@
-flask
-flask-sqlalchemy
 websocket-client
 sqlalchemy
 sqlalchemy-utils
 psycopg2-binary
 python-dotenv
 pathlib
+pycountry
