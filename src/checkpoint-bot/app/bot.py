@@ -11,5 +11,5 @@ if __name__ == '__main__':
     while True:
         try:
             ws.run()
-        except:
-            pass
+        except Exception as e:
+            logging.exception(e)
