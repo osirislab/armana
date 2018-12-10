@@ -77,7 +77,7 @@ class SocketThread(threading.Thread):
                 on_error=self.handle_error,
                 on_close=self.handle_close)
 
-    def handle_message(self, ws, rawstr):
+    def handle_message(self, rawstr):
         if not self.checked:
             self.checked = True
             return
@@ -130,19 +130,18 @@ class SocketThread(threading.Thread):
         scountry = pycountry.countries.get(alpha_2=scountry).name
         dcountry = pycountry.countries.get(alpha_2=dcountry).name
         
-        with self.app.app_context():
-            self.session.add(
-                Threat(
-                    scity, scountry,
-                    dcity, dcountry,
-                    sstate, dstate,
-                    slong, dlong,
-                    slat, dlat,
-                    int(timestamp / 1000),
-                    attackname, attacktype
-                )
+        self.session.add(
+            Threat(
+                scity, scountry,
+                dcity, dcountry,
+                sstate, dstate,
+                slong, dlong,
+                slat, dlat,
+                int(timestamp / 1000),
+                attackname, attacktype
             )
-            self.session.commit()
+        )
+        self.session.commit()
 
         if self.debug:
             l = 32
@@ -153,10 +152,10 @@ class SocketThread(threading.Thread):
                 n.ljust(l), scountry.ljust(l), dcountry.rjust(l)
             ))
     
-    def handle_error(self, ws, error):
+    def handle_error(self, error):
         print(error)
 
-    def handle_close(self, ws):
+    def handle_close(self):
         print('WebSocketApp terminated')
 
     def run(self):
