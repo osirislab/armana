@@ -39,7 +39,7 @@ if __name__ == "__main__":
     # cur = conn.cursor()
     # cur.execute("CREATE TABLE IF NOT EXISTS fortiguard(id serial PRIMARY KEY, attack json )")
     with open("data.csv", "w") as f:
-        f.write("srclan,srclon,srccountrycode,dstlan,dstlon,dstcountrycode,type,severity")
+        f.write("srclan,srclon,srccountrycode,dstlan,dstlon,dstcountrycode,type,severity\n")
         websocket.enableTrace(True)
         ws = websocket.WebSocketApp("wss://threatmap.fortiguard.com/ws",
                                     on_open=on_open,
