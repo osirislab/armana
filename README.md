@@ -1,5 +1,5 @@
-# Botnet
+# The Racing Game
 
-_Authors: Zezhou Wang, Zhengqing Ye, Liyun Li_
+For references and paper, navigate to `papers`. Filenames that start with `Security Analytics` is our reseach paper. The rest are references.
 
-## Abstract 
+Source code is in `src`
