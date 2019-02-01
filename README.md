@@ -1,6 +1,6 @@
 # Armana
 
-Armana aims to become an real-time Internet monitor to prioritize incident response.
+Armana aims to become a real-time Internet threat monitor to accelerate incident response.
 
 ## How to build
 
