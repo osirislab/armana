@@ -1,2 +1,6 @@
 /.idea
 *.iml
+db-data
+db-data-checkpoint
+.env
+*.log
