@@ -1,6 +1,17 @@
 # Armana
 
-Armana aims to become an real-time Internet monitor to prioritize incident response. Source code and build insturctions are in `src`.
+Armana aims to become an real-time Internet monitor to prioritize incident response.
+
+## How to build
+
+You will need:
+
+* Docker and Docker Compose
+* Probably a Linux machine although theoretically it can run on most hosts
+
+```
+docker-compose up
+```
 
 ## How it works
 
