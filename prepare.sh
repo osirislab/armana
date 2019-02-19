@@ -1,30 +1,79 @@
 #!/usr/bin/env sh
 
-SHODAN_DIR='./shodan/bot'
-CHECKPOINT_DIR='./checkpoint-bot/app'
+# either nothing or -g
+GENERATE_ENV_CHECKPOINT='-g'
+GENERATE_ENV_SHODAN='-g'
 
-shodan_name=`cat $SHODAN_DIR/.env | grep DB_NAME | cut -d '=' -f2`
-shodan_user=`cat $SHODAN_DIR/.env | grep DB_USER | cut -d '=' -f2`
-shodan_password=`cat $SHODAN_DIR/.env | grep DB_PASS | cut -d '=' -f2`
+# options
+SHORT_OPTIONS='scfha'
+LONG_OPTIONS='shodan,checkpoint,fortiguard,help,all'
 
-checkpoint_name=`cat $CHECKPOINT_DIR/.env | grep DB_NAME | cut -d '=' -f2`
-checkpoint_user=`cat $CHECKPOINT_DIR/.env | grep DB_USER | cut -d '=' -f2`
-checkpoint_password=`cat $CHECKPOINT_DIR/.env | grep DB_PASS | cut -d '=' -f2`
+usage() {
+	echo "USAGE: $0 -$SHORT_OPTIONS"
+	echo "Arguments:"
+	echo "\t-h                  Print this"
+	echo "\t-a --all            Prepare for launching all services"
+	echo "\t                    Do not use with the rest"
+	echo "\t-s --shodan         Prepare for launching Shodan"
+	echo "\t-c --checkpoint     Prepare for launching Check Point bot"
+	echo "\t-f --fortiguard     Do nothing (for now that is)"
+	echo "Examples:"
+	echo "\tprepare.sh --all    # Prepare everything"
+	echo "\tprepare.sh -s -c    # Prepare checkpoint and shodan bot"
+	echo "\tprepare.sh --shodan # Prepare shodan bot"
+	exit 0
+}
 
-[ -z $shodan_name ] && echo 'DB name required' && exit 1
-[ -z $shodan_user ] && echo 'DB user required' && exit 1
-[ -z $shodan_password ] && echo 'DB password required' && exit 1
+[ -z $1 ] && usage
 
-[ -z $checkpoint_name ] && echo 'DB name required' && exit 1
-[ -z $checkpoint_user ] && echo 'DB user required' && exit 1
-[ -z $checkpoint_password ] && echo 'DB password required' && exit 1
+getopt --test
+status=$?
+if [ $status -ne 4 ]; then
+	echo 'WARNING: getopt is not working. No argument is parsed'
+else
+	PARSED_OPTIONS=`getopt -o $SHORT_OPTIONS -l $LONG_OPTIONS -n "$0" -- "$@"`
+	status=$?
+	[ $status -ne 0 ] && usage
+	eval set -- "$PARSED_OPTIONS"
+fi
 
+# back up just because
 cp -n docker-compose.yml docker-compose.yml.bak
 
-sed -i "s/<DB_NAME_HERE>/$shodan_name/g" docker-compose.yml
-sed -i "s/<DB_USER_HERE>/$shodan_user/g" docker-compose.yml
-sed -i "s/<DB_PASSWORD_HERE>/$shodan_password/g" docker-compose.yml
+conflict=0
+if [ -n "$PARSED_OPTIONS" ]; then
+	while true; do
+		case "$1" in
+			-h|--help)
+				usage
+				;;
+			-a|--all)
+				if [ $conflict -eq 0 ]; then
+					sh scripts/prepare-shodan.sh $GENERATE_ENV_SHODAN
+					sh scripts/prepare-checkpoint.sh $GENERATE_ENV_CHECKPOINT
+					break
+				fi
+				shift
+				;;
+			-c|--checkpoint)
+				sh scripts/prepare-checkpoint.sh $GENERATE_ENV_CHECKPOINT
+				conflict=1
+				shift
+				;;
+			-s|--shodan)
+				sh scripts/prepare-shodan.sh $GENERATE_ENV_SHODAN
+				conflict=1
+				shift
+				;;
+			--)
+				shift
+				break
+				;;
+			*)
+				echo "You shouldn't be here"
+				exit 1
+				;;
+		esac
+	done
+fi
 
-sed -i "s/<CHECKPOINT_BOT_DB_NAME_HERE>/$checkpoint_name/g" docker-compose.yml
-sed -i "s/<CHECKPOINT_BOT_DB_USER_HERE>/$checkpoint_user/g" docker-compose.yml
-sed -i "s/<CHECKPOINT_BOT_DB_PASSWORD_HERE>/$checkpoint_password/g" docker-compose.yml
