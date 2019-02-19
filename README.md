@@ -2,16 +2,23 @@
 
 Armana aims to become a real-time Internet threat monitor to accelerate incident response.
 
-## How to build
+## Usage
 
 You will need:
 
-* Docker and Docker Compose
-* Probably a Linux machine although theoretically it can run on most hosts
+* Docker and Docker Compose.
+* A Linux computer although theoretically it can run on most hosts.
+* (Optional) `pwgen`. Refer to your OS for specific installation instruction.
+
+Basically, to prepare for the services, you need to modify `docker-compose.yml` by either `./prepare.sh -ag` or making `.env` files in `shodan/bot` and `checkpoint/app`, then modifying `docker-compose.yml` accordingly.
+
+You will need to add the following line to `shodan/bot/.env` for using Shodan:
 
 ```
-docker-compose up
+API_KEY=<the shodan api key you have>
 ```
+
+Once everything looks okay, do `docker-compose up` to start up all services. For additional help: `./prepare.sh -h`
 
 ## How it works
 
@@ -23,6 +30,7 @@ docker-compose up
 
 ## Roadmap
 
+* Automate stuff.
 * Make better parser for Shodan's stream.
 * Find more threat data source (free or paid?).
 * Integrate Google Map API as a gazetteer source.
@@ -31,3 +39,5 @@ docker-compose up
 * Make web app to advertise product and have organizations sign up or opt out.
 * Properly license this thing.
 * Code cleanup.
+* Support for Windows.
+* Support for IoT devices.

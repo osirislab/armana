@@ -29,6 +29,7 @@ class ThreatSourceStat(Base):
     def __repr__(self):
         return 'Source Threat Count - {}: {}'.format(self.country, self.count)
 
+
 class ThreatDestinationStat(Base):
     __tablename__ = 'threat_destination_stat'
 
@@ -52,6 +53,7 @@ class ThreatDestinationStat(Base):
     def __repr__(self):
         return 'Destination Threat Count - {}: {}'.format(self.country, self.count)
 
+
 class Threat(Base):
     __tablename__ = 'threat'
 
@@ -71,10 +73,10 @@ class Threat(Base):
     atk_type = Column(Text)
     atk_name = Column(Text)
 
-    def __init__(self, scity, scountry, 
-            dcity, dcountry, sstate, dstate, 
-            slong, dlong, slat, dlat, 
-            timestamp, atk_name, atk_type):
+    def __init__(self, scity, scountry,
+                 dcity, dcountry, sstate, dstate,
+                 slong, dlong, slat, dlat,
+                 timestamp, atk_name, atk_type):
 
         self.src_city = scity
         self.dst_city = dcity

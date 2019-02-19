@@ -14,7 +14,7 @@ from os import getenv
 
 from models import *
 
-load_dotenv(verbose=True, dotenv_path=Path('.')  / '.env')
+load_dotenv(verbose=True, dotenv_path=Path('.') / '.env')
 
 dbu = getenv('DB_USER')
 dbp = getenv('DB_PASS')
@@ -22,7 +22,8 @@ dbh = getenv('DB_HOST')
 dbn = getenv('DB_NAME')
 
 
-link = 'postgresql+psycopg2://{u}:{p}@{h}/{n}'.format(u=dbu, p=dbp, h=dbh, n=dbn)
+link = 'postgresql+psycopg2://{u}:{p}@{h}/{n}'.format(
+    u=dbu, p=dbp, h=dbh, n=dbn)
 
 
 print('Checking the database.')
@@ -34,7 +35,7 @@ print('Creating the engine.')
 engine = create_engine(link, echo=True, pool_recycle=600)
 
 print('Creating tables.')
-Base.metadata.create_all(engine) # Base is from models
+Base.metadata.create_all(engine)  # Base is from models
 
 print('Creating a session.')
 Session = sessionmaker(bind=engine)
@@ -72,10 +73,10 @@ class SocketThread(threading.Thread):
         self.session = session
         self.checked = False
         self.debug = debug
-        self.ws = websocket.WebSocketApp(target_url, 
-                on_message=self.handle_message,
-                on_error=self.handle_error,
-                on_close=self.handle_close)
+        self.ws = websocket.WebSocketApp(target_url,
+                                         on_message=self.handle_message,
+                                         on_error=self.handle_error,
+                                         on_close=self.handle_close)
 
     def handle_message(self, rawstr):
         if not self.checked:
@@ -129,29 +130,34 @@ class SocketThread(threading.Thread):
 
         scountry = pycountry.countries.get(alpha_2=scountry).name
         dcountry = pycountry.countries.get(alpha_2=dcountry).name
-        
-        self.session.add(
-            Threat(
-                scity, scountry,
-                dcity, dcountry,
-                sstate, dstate,
-                slong, dlong,
-                slat, dlat,
-                int(timestamp / 1000),
-                attackname, attacktype
+
+        if 'USA' in dcountry:
+            self.session.add(
+                Threat(
+                    scity, scountry,
+                    dcity, dcountry,
+                    sstate, dstate,
+                    slong, dlong,
+                    slat, dlat,
+                    int(timestamp / 1000),
+                    attackname, attacktype
+                )
             )
-        )
-        self.session.commit()
+            try:
+                self.session.commit()
+            except:
+                self.session.rollback()
+                raise
 
         if self.debug:
             l = 32
             n = datetime.datetime.fromtimestamp(
-                    timestamp / 1000
+                timestamp / 1000
             ).strftime('%Y-%m-%d %H:%M:%S')
             print('{}{} ︻╦╤─ {}\n'.format(
                 n.ljust(l), scountry.ljust(l), dcountry.rjust(l)
             ))
-    
+
     def handle_error(self, error):
         print(error)
 

@@ -1,15 +1,26 @@
 # coding: utf-8
-from models import Stream, Location
-from shodan import stream
-from db import Session
-from re import sub
 import logging
 
+from models import Stream, Location
+from dotenv import load_dotenv
+from shodan import stream
+from pathlib import Path
+from db import Session
+from os import getenv
+from re import sub
 
+# logging configuration
 logging.basicConfig(filename='shodan_streamer.log', level=logging.ERROR)
 logging.getLogger('sqlalchemy').setLevel(logging.ERROR)
 
-bot = stream.Stream('qdH2Wz6Cpi14M2cVgnZ7AXOlf12FyCdT')
+# .env configuration
+load_dotenv(verbose=True, dotenv_path=Path('.') / '.env')
+key = getenv('API_KEY')
+if not key:
+    print('API_KEY not specified')
+    exit(1)
+
+bot = stream.Stream(key)
 
 session = Session()
 
@@ -33,7 +44,7 @@ for record in bot.countries(['US']):
     ip_str = clean(record.get('ip_str'))
 
     s = Stream(
-        product=product, hash=hash, ip=ip, org=org, data=data, port=port, 
+        product=product, hash=hash, ip=ip, org=org, data=data, port=port,
         transport=transport, isp=isp, timestamp=timestamp, ip_str=ip_str
     )
 

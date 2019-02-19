@@ -4,11 +4,11 @@ services:
         container_name: shodan_db
         image: postgres:11-alpine
         environment:
-            - POSTGRES_DB=<DB_NAME_HERE>
-            - POSTGRES_USER=<DB_USER_HERE>
-            - POSTGRES_PASSWORD=<DB_PASSWORD_HERE>
+            - POSTGRES_DB=<SHODAN_DB_NAME_HERE>
+            - POSTGRES_USER=<SHODAN_DB_USER_HERE>
+            - POSTGRES_PASSWORD=<SHODAN_DB_PASSWORD_HERE>
         healthcheck:
-            test: "pg_isready -U <DB_USER_HERE>"
+            test: "pg_isready -U <SHODAN_DB_USER_HERE>"
             interval: 10s
             timeout: 5s
             retries: 5
@@ -34,11 +34,11 @@ services:
         container_name: checkpoint_db
         image: postgres:11-alpine
         environment:
-            - POSTGRES_DB=<CHECKPOINT_BOT_DB_NAME_HERE>
-            - POSTGRES_USER=<CHECKPOINT_BOT_DB_USER_HERE>
-            - POSTGRES_PASSWORD=<CHECKPOINT_BOT_DB_PASSWORD_HERE>
+            - POSTGRES_DB=<CHECKPOINT_DB_NAME_HERE>
+            - POSTGRES_USER=<CHECKPOINT_DB_USER_HERE>
+            - POSTGRES_PASSWORD=<CHECKPOINT_DB_PASSWORD_HERE>
         healthcheck:
-            test: "pg_isready -U <CHECKPOINT_BOT_DB_USER_HERE>"
+            test: "pg_isready -U <CHECKPOINT_DB_USER_HERE>"
             interval: 10s
             timeout: 5s
             retries: 5
@@ -49,11 +49,11 @@ services:
 
     checkpoint_bot:
         container_name: checkpoint_bot
-        build: ./checkpoint-bot
+        build: ./checkpoint
         depends_on:
             - checkpoint_db
         volumes:
-            - ./checkpoint-bot/app:/bot
+            - ./checkpoint/app:/bot
         command: python /bot/bot.py
         networks:
             - checkpoint_gateway
