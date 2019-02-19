@@ -1,26 +1,25 @@
 #!/usr/bin/env sh
 
-# either nothing or -g
-GENERATE_ENV_CHECKPOINT='-g'
-GENERATE_ENV_SHODAN='-g'
-
 # options
-SHORT_OPTIONS='scfha'
-LONG_OPTIONS='shodan,checkpoint,fortiguard,help,all'
+SHORT_OPTIONS='schag'
+LONG_OPTIONS='shodan,checkpoint,help,all,generate-env'
+
+USAGE="USAGE: $0 -$SHORT_OPTIONS
+Arguments:
+\t-h                  Print this
+\t-a --all            Prepare for launching all services
+\t                    Do not use with the rest
+\t-s --shodan         Prepare for launching Shodan
+\t-c --checkpoint     Prepare for launching Check Point bot
+\t-g --generate-env   Generate .env files
+\t                    WANRING: This will overwrite existing .env files
+Examples:
+\tprepare.sh --all    # Prepare everything
+\tprepare.sh -s -c    # Prepare checkpoint and shodan bot
+\tprepare.sh --shodan # Prepare shodan bot"
 
 usage() {
-	echo "USAGE: $0 -$SHORT_OPTIONS"
-	echo "Arguments:"
-	echo "\t-h                  Print this"
-	echo "\t-a --all            Prepare for launching all services"
-	echo "\t                    Do not use with the rest"
-	echo "\t-s --shodan         Prepare for launching Shodan"
-	echo "\t-c --checkpoint     Prepare for launching Check Point bot"
-	echo "\t-f --fortiguard     Do nothing (for now that is)"
-	echo "Examples:"
-	echo "\tprepare.sh --all    # Prepare everything"
-	echo "\tprepare.sh -s -c    # Prepare checkpoint and shodan bot"
-	echo "\tprepare.sh --shodan # Prepare shodan bot"
+	echo "$USAGE"
 	exit 0
 }
 
@@ -29,7 +28,7 @@ usage() {
 getopt --test
 status=$?
 if [ $status -ne 4 ]; then
-	echo 'WARNING: getopt is not working. No argument is parsed'
+	echo 'ERROR: getopt is not working. No argument is parsed'
 else
 	PARSED_OPTIONS=`getopt -o $SHORT_OPTIONS -l $LONG_OPTIONS -n "$0" -- "$@"`
 	status=$?
@@ -37,32 +36,34 @@ else
 	eval set -- "$PARSED_OPTIONS"
 fi
 
-# back up just because
-cp -n docker-compose.yml docker-compose.yml.bak
-
-conflict=0
 if [ -n "$PARSED_OPTIONS" ]; then
+	run_shodan=0
+	run_checkpoint=0
+	generate_env_shodan=''
+	generate_env_checkpoint=''
+
 	while true; do
 		case "$1" in
 			-h|--help)
 				usage
 				;;
+			-g|--generate-env)
+				echo 'Environmental variables generated'
+				generate_env_checkpoint='-g'
+				generate_env_shodan='-g'
+				shift
+				;;
 			-a|--all)
-				if [ $conflict -eq 0 ]; then
-					sh scripts/prepare-shodan.sh $GENERATE_ENV_SHODAN
-					sh scripts/prepare-checkpoint.sh $GENERATE_ENV_CHECKPOINT
-					break
-				fi
+				run_shodan=1
+				run_checkpoint=1
 				shift
 				;;
 			-c|--checkpoint)
-				sh scripts/prepare-checkpoint.sh $GENERATE_ENV_CHECKPOINT
-				conflict=1
+				run_checkpoint=1
 				shift
 				;;
 			-s|--shodan)
-				sh scripts/prepare-shodan.sh $GENERATE_ENV_SHODAN
-				conflict=1
+				run_shodan=1
 				shift
 				;;
 			--)
@@ -75,5 +76,18 @@ if [ -n "$PARSED_OPTIONS" ]; then
 				;;
 		esac
 	done
-fi
 
+	[ $run_shodan -eq 0 ] && [ $run_checkpoint -eq 0 ] && \
+		echo 'No service started' && exit 1
+
+	# back up just because
+	cp -n docker-compose.yml docker-compose.yml.bak
+
+	[ $run_shodan -eq 1 ] && \
+		sh scripts/prepare-shodan.sh $generate_env_shodan
+	[ $run_checkpoint -eq 1 ] && \
+		sh scripts/prepare-checkpoint.sh $generate_env_checkpoint
+
+else
+	echo 'ERROR: Arguments not parsed'
+fi

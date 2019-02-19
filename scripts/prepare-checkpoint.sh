@@ -7,19 +7,14 @@ CHECKPOINT_DIR='checkpoint/app'
 SHORT_OPTIONS='ghv'
 LONG_OPTIONS='generate,help,verbose'
 
-# options to specify if you want to generate a .env file
-# WARNING: this will overwrite the existing .env file
-DB_NAME="checkpoint"
-DB_HOST="checkpoint_db"
-DB_USER="checkpoint_bot"
-DB_PASS="`sh scripts/pwgen.sh`"
+USAGE="USAGE: $0 -ghv
+Arguments:
+\t-h               Print this
+\t-g --generate    Generate new .env file
+\t-v --verbose     Adds nothing (for now that is)"
 
 usage() {
-	echo "USAGE: $0 -ghv"
-	echo "Arguments:"
-	echo "\t-h               Print this"
-	echo "\t-g --generate    Generate new .env file"
-	echo "\t-v --verbose     Adds nothing (for now that is)"
+	echo "$USAGE"
 	exit 0
 }
 
@@ -36,6 +31,7 @@ fi
 
 verbose=0
 if [ -n "$PARSED_OPTIONS" ]; then
+
 	while true; do
 		case "$1" in
 			-h|--help)
@@ -43,6 +39,14 @@ if [ -n "$PARSED_OPTIONS" ]; then
 				;;
 			-g|--generate) # generate .env file for checkpoint
 				env_path="$CHECKPOINT_DIR/.env"
+
+				# options to specify if you want to generate a .env file
+				# WARNING: this will overwrite the existing .env file
+				DB_NAME="checkpoint"
+				DB_HOST="checkpoint_db"
+				DB_USER="checkpoint_bot"
+				DB_PASS="`sh scripts/pwgen.sh`"
+
 				echo 'DB_NAME='$DB_NAME > $env_path
 				echo 'DB_HOST='$DB_HOST >> $env_path
 				echo 'DB_USER='$DB_USER >> $env_path
