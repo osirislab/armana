@@ -3,3 +3,4 @@ python-dotenv
 psycopg2-binary
 sqlalchemy
 sqlalchemy_utils
+dotenv
