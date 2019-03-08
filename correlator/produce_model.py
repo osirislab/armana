@@ -1,12 +1,12 @@
 import pandas
+import numpy as np
+
 from sklearn import preprocessing
-from sklearn.cross_validation import cross_val_score
+from sklearn.model_selection import cross_val_score
 from sklearn.externals import joblib
 from sklearn.svm import SVC
-from sklearn.linear_model import LogisticRegression
+# from sklearn.linear_model import LogisticRegression
 from sklearn.neighbors import KNeighborsClassifier
-from sklearn.ensemble import RandomForestClassifier
-import numpy as np
 from multiprocessing import Pool
 from functools import partial
 from contextlib import contextmanager
@@ -15,9 +15,9 @@ from pyspark.sql import SparkSession
 from pyspark.sql.types import *
 
 threat_loc_file = "checkpoint_threat.csv"
-shodan_file = "stream.csv"
+shodan_file = "shodan.csv"
 
-spss = SparkSession.builder.master('local[*]').appName('armana').getOrCreate()
+spss = SparkSession.builder.appName('armana').getOrCreate()
 
 threat_sppd = spss.read.csv(threat_loc_file, inferSchema=True, header=True)
 shodan_sppd = spss.read.csv(shodan_file, inferSchema=True, header=True)
@@ -27,7 +27,7 @@ threat_sppd = threat_sppd.drop('atk_type')
 threat_sppd = threat_sppd.fillna('na')
 
 shodan_sppd = shodan_sppd.filter(shodan_sppd.ip.isNotNull())
-shodan_sppd = shodan_sppd.filter(shodan_sppd.longtitude.isNotNull())
+shodan_sppd = shodan_sppd.filter(shodan_sppd.longitude.isNotNull())
 shodan_sppd = shodan_sppd.filter(shodan_sppd.latitude.isNotNull())
 
 
@@ -74,7 +74,7 @@ threat_pd = threat_pd.loc[threat_pd['dst_country'] == 'United States']
 
 shodan_pd = shodan_sppd.toPandas()
 
-train = np.array(shodan_pd[['id', 'latitude', 'longtitude']])
+train = np.array(shodan_pd[['id', 'latitude', 'longitude']])
 test = np.array(threat_pd[['dst_latitude', 'dst_longitude']])
 
 
@@ -107,7 +107,7 @@ shodan_threat_banner_en = shodan_threat_banner[['product', 'ip_str', 'org',
                                                 'transport', 'isp',
                                                 'country_code_3', 'postal_code', 'dma_code', 'area_code', ]]
 
-shodan_tmp = shodan_threat_banner[['port', 'longtitude', 'latitude', 'threat']]
+shodan_tmp = shodan_threat_banner[['port', 'longitude', 'latitude', 'threat']]
 le = preprocessing.LabelEncoder()
 shodan_threat_banner_en = shodan_threat_banner_en.apply(le.fit_transform)
 shodan_threat_banner = shodan_tmp.join(shodan_threat_banner_en)
@@ -117,27 +117,27 @@ shodan_threat_banner = shodan_threat_banner.sample(
 shodan_train_np_X = np.array(shodan_threat_banner)
 shodan_train_y = np.array(shodan_threat_banner['threat'])
 
-randF = RandomForestClassifier(
-    n_estimators=600, max_depth=15, min_samples_leaf=2)
+# randF = RandomForestClassifier(
+# n_estimators=600, max_depth=15, min_samples_leaf=2)
 knnF = KNeighborsClassifier()
-logReg = LogisticRegression(
-    random_state=0, solver='lbfgs', multi_class='multinomial')
-svm_clf = SVC(gamma='auto')
+# logReg = LogisticRegression(
+# random_state=0, solver='lbfgs', multi_class='multinomial')
+svm_clf = SVC(gamma='auto', max_iter=10000)
 
 
-randF.fit(shodan_train_np_X, shodan_train_y)
+# randF.fit(shodan_train_np_X, shodan_train_y)
 knnF.fit(shodan_train_np_X, shodan_train_y)
-logReg.fit(shodan_train_np_X, shodan_train_y)
+# logReg.fit(shodan_train_np_X, shodan_train_y)
 svm_clf.fit(shodan_train_np_X, shodan_train_y)
 
-randF_file = 'random_forestml.sav'
+# randF_file = 'random_forestml.sav'
 knnF_file = 'KNN_ml.sav'
-logReg_file = 'logReg.sav'
+# logReg_file = 'logReg.sav'
 svm_file = 'svm.sav'
 
-joblib.dump(randF, randF_file)
+# joblib.dump(randF, randF_file)
 joblib.dump(knnF, knnF_file)
-joblib.dump(logReg, logReg_file)
+# joblib.dump(logReg, logReg_file)
 joblib.dump(svm_clf, svm_file)
 # in order to use the model
 # run the following code
