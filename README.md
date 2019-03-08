@@ -30,7 +30,7 @@ Once everything looks okay, do `docker-compose up` to start up all services. For
 
 ## Roadmap
 
-* Automate stuff.
+* Automate stuff, GHDB, Shodan Exploit, etc.
 * Meta-Program the heck out of this.
 * Make better parser for Shodan's stream.
 * Find more threat data source (free or paid?).
