@@ -73,10 +73,12 @@ class SocketThread(threading.Thread):
         self.session = session
         self.checked = False
         self.debug = debug
-        self.ws = websocket.WebSocketApp(target_url,
-                                         on_message=self.handle_message,
-                                         on_error=self.handle_error,
-                                         on_close=self.handle_close)
+        self.ws = websocket.WebSocketApp(
+            target_url,
+            on_message=self.handle_message,
+            on_error=self.handle_error,
+            on_close=self.handle_close
+        )
 
     def handle_message(self, rawstr):
         if not self.checked:
