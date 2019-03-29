@@ -151,14 +151,14 @@ class SocketThread(threading.Thread):
                 self.session.rollback()
                 raise
 
-        if self.debug:
-            l = 32
-            n = datetime.datetime.fromtimestamp(
-                timestamp / 1000
-            ).strftime('%Y-%m-%d %H:%M:%S')
-            print('{}{} ︻╦╤─ {}\n'.format(
-                n.ljust(l), scountry.ljust(l), dcountry.rjust(l)
-            ))
+            if self.debug:
+                l = 32
+                n = datetime.datetime.fromtimestamp(
+                    timestamp / 1000
+                ).strftime('%Y-%m-%d %H:%M:%S')
+                print('{}{} ︻╦╤─ {}\n'.format(
+                    n.ljust(l), scountry.ljust(l), dcountry.rjust(l)
+                ))
 
     def handle_error(self, error):
         print(error)
