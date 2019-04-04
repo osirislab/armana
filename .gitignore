@@ -4,3 +4,6 @@ db-data
 db-data-checkpoint
 .env
 *.log
+*.bak
+__pycache__/
+*.pyc

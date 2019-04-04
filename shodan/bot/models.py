@@ -20,17 +20,20 @@ class Stream(Base):
     timestamp = Column(Text)
     ip_str = Column(Text)
 
+
 class HostName(Base):
     __tablename__ = 'hostname'
 
     stream_id = Column(BigInteger, ForeignKey("stream.id"), primary_key=True)
     hostname = Column(Text)
 
-class CPE(Base): # TODO: figure out what this actually does
+
+class CPE(Base):  # TODO: figure out what this actually does
     __tablename__ = 'cpe'
 
     stream_id = Column(BigInteger, ForeignKey("stream.id"), primary_key=True)
     cpe = Column(Text)
+
 
 class Location(Base):
     __tablename__ = 'location'
@@ -73,6 +76,7 @@ class HTTP(Base):
     # TODO: Parse the HTTP objects properly
     stream_id = Column(BigInteger, ForeignKey("stream.id"), primary_key=True)
     http = Column(Text)
+
 
 class SSL(Base):
     __tablename__ = 'ssl'
